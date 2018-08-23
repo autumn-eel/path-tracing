@@ -42,6 +42,7 @@ Color raytrace(Ray l,int depth){
 			if(tim<EPS)continue;
 			bool flag=true;
 			rep(j,n){
+				if(i==j)continue;
 				double t=s.intersect(object[j]);
 				if(t>EPS&&t+EPS<tim){
 					flag=false;

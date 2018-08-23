@@ -14,14 +14,14 @@ int main(){
 	Vector camera(WIDTH/2,-1000,HEIGHT/2);
 	int dx=(SCREEN_WIDTH-WIDTH)/2,dy=(SCREEN_HEIGHT-HEIGHT)/2;
 	n=sizeof(object)/sizeof(SphereObject);
-	#pragma omp parallel for num_threads(4)
+	#pragma omp parallel for schedule(dynamic, 1) num_threads(4)
 	rep(i,SCREEN_HEIGHT){
 		cout<<i<<endl;
 		rep(j,SCREEN_WIDTH){
 			rep(sx,SUPER_SAMPLES)rep(sy,SUPER_SAMPLES){
 				rep(k,SAMPLES){
-					double t=1./SUPER_SAMPLES;
-					Vector s(j-dx+sx*t,0,i-dy+sy*t);
+					double t=1./(SUPER_SAMPLES);
+					Vector s(j-dx+sx*t+rand_01()*t,0,i-dy+sy*t+rand_01()*t);
 					image[SCREEN_HEIGHT-i-1][j]=image[SCREEN_HEIGHT-i-1][j]+raytrace(Ray(s,s-camera),0)/SAMPLES/(SUPER_SAMPLES*SUPER_SAMPLES);
 				}
 			}
