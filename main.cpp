@@ -14,6 +14,7 @@ int main(){
 	Vector camera(WIDTH/2,-1000,HEIGHT/2);
 	int dx=(SCREEN_WIDTH-WIDTH)/2,dy=(SCREEN_HEIGHT-HEIGHT)/2;
 	n=sizeof(object)/sizeof(SphereObject);
+	#pragma omp parallel for num_threads(4)
 	rep(i,SCREEN_HEIGHT){
 		cout<<i<<endl;
 		rep(j,SCREEN_WIDTH){
