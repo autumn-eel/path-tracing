@@ -7,17 +7,17 @@
 Color pathtrace(Ray l,int depth){
 	double Min=INF;int id=-1;
 	rep(i,n){
-		double p=l.intersect(object[i]);
+		double p=object[i]->intersect(l);
 		if(p>EPS&&Min>p)Min=p,id=i;
 	}
 	if(id==-1)return Color();
-	if(object[id].l!=Color()){
-		return object[id].l;
+	if(object[id]->l!=Color()){
+		return object[id]->l;
 	}
 	Color res;
 	Vector point=l.p+l.d*Min;
-	Vector normal=(point-object[id].p).normalize();
-	double q=max({object[id].c.x,object[id].c.y,object[id].c.z});
+	Vector normal=object[id]->get_normal(point);
+	double q=max({object[id]->c.x,object[id]->c.y,object[id]->c.z});
 	if(depth>DEPTH_MAX){
 		q*=pow(0.5,depth-DEPTH_MAX);
 	}
@@ -27,11 +27,11 @@ Color pathtrace(Ray l,int depth){
 		}
 	}
 	else q=1;
-	if(object[id].t==SPECULAR){
+	if(object[id]->t==SPECULAR){
 		Vector w=l.d*-1;
 		Vector w_=normal*2*w.dot(normal)-w;
 		Ray s(point,w_);
-		res=object[id].c*pathtrace(s,depth+1);
+		res=object[id]->c*pathtrace(s,depth+1);
 	}
 	else{
 		Vector w,u,v;
@@ -46,7 +46,7 @@ Color pathtrace(Ray l,int depth){
 		double r1=2*M_PI*rand_01();
 		double r2=rand_01(),r2s=sqrt(r2);
 		Vector dir=(u*cos(r1)*r2s+v*sin(r1)*r2s+w*sqrt(1-r2)).normalize();
-		res=res+object[id].c*pathtrace(Ray(point,dir),depth+1);
+		res=res+object[id]->c*pathtrace(Ray(point,dir),depth+1);
 	}
 	return res/q;
 }

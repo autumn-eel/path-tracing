@@ -3,7 +3,6 @@
 using namespace std;
 
 int n;
-
 #include "raytrace.h"
 #include "pathtrace.h"
 #include "ppm.h"
@@ -11,9 +10,10 @@ int n;
 Color image[SCREEN_HEIGHT][SCREEN_WIDTH];
 
 int main(){
+	object_init();
+	n=object.size();
 	Vector camera(WIDTH/2,-1000,HEIGHT/2);
 	int dx=(SCREEN_WIDTH-WIDTH)/2,dy=(SCREEN_HEIGHT-HEIGHT)/2;
-	n=sizeof(object)/sizeof(SphereObject);
 	#pragma omp parallel for schedule(dynamic, 1) num_threads(4)
 	rep(i,SCREEN_HEIGHT){
 		cout<<i<<endl;

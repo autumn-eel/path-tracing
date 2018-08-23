@@ -46,20 +46,45 @@ struct Vector{
 
 typedef Vector Color;
 
-struct Sphere{
-	Vector p;
-	double r;
-	Sphere(){}
-	Sphere(Vector p,double r):p(p),r(r){}
-};
 
 struct Ray{
 	Vector p,d;
-	Ray(Vector p,Vector d):p(p),d(d){}
-	double intersect(Sphere c){
-		d.normalize();
-		double B=d.dot(p-c.p);
-		double C=(p-c.p).norm()-c.r*c.r;
+	Ray(Vector p,Vector d_):p(p){
+		d=d_.normalize();
+	}
+};
+
+enum Type{
+	LAMBERT,
+	SPECULAR
+};
+
+struct Object{
+	Type t;		//面の状態
+	Color c;	//反射率
+	Color l;	//放射
+	Vector o;	//光源位置
+	
+	Object(){}
+	Object(Type t,Color c=Color(),Color l=Color())
+		:t(t),c(c),l(l){}
+
+	virtual double intersect(Ray){return 0;}
+	virtual Vector get_normal(Vector){return Vector();}
+};
+
+struct Sphere:public Object{
+	Vector p;
+	double r;
+	Sphere(Vector p,double r,Type t,Color c=Color(),Color l=Color(),Vector o_=Vector()):
+		Object(t,c,l),p(p),r(r){
+		o=o_;
+		if(o==Vector())o=p-Vector(0,0,r);
+	}
+
+	double intersect(Ray l){
+		double B=l.d.dot(l.p-p);
+		double C=(l.p-p).norm()-r*r;
 		double D=B*B-C;
 		if(D<0)return -1;
 		double E=sqrt(D);
@@ -67,16 +92,27 @@ struct Ray{
 		if(-B-E>EPS)return -B-E;
 		return -B+E;
 	}
+	Vector get_normal(Vector point){
+		return (point-p).normalize();
+	}
 };
 
-enum type{
-	LAMBERT,
-	SPECULAR
-};
+struct Plane:public Object{
+	Vector v1,v2,v3;
+	Vector normal;
+	double d;		//平面と原点の距離
+	Plane(Vector v1,Vector v2,Vector v3,Type t,Color c=Color(),Color l=Color(),Vector o_=Vector()):
+		Object(t,c,l),v1(v1),v2(v2),v3(v3){
+		o=o_;
+		if(o==Vector())o=Vector((v1.x+v2.x+v3.x)/3,(v1.y+v2.y+v3.y)/3,(v1.z+v2.z+v3.z)/3);
+		normal=(v2-v1).det(v3-v1).normalize();
+		d=v1.dot(normal);
+	}
 
-struct SphereObject:public Sphere{
-	type t;
-	Color c,l;
-	SphereObject(Vector p,double r,type t,Color c=Color(),Color l=Color()):
-		Sphere(p,r),t(t),c(c),l(l){}
+	double intersect(Ray l){
+		return (d-l.p.dot(normal))/l.d.dot(normal);
+	}
+	Vector get_normal(Vector point){
+		return normal;
+	}
 };
