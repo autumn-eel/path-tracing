@@ -12,16 +12,23 @@ Sphere sphere[]={
 	Sphere(Vector(WIDTH/2,DEPTH+1e5,HEIGHT/2),1e5,LAMBERT,Color(0.75,0.25,0.75))//奥
 };
 Plane plane[]={
-	Plane(Vector(0,DEPTH,150),Vector(0,0,0),Vector(WIDTH,0,0),LAMBERT,Color(0.25,0.75,0.75))
+	//~ Plane(Vector(0,DEPTH,150),Vector(0,0,0),Vector(WIDTH,0,0),LAMBERT,Color(0.25,0.75,0.75))
+};
+Triangle triangle[]={
+	Triangle(Vector(100,DEPTH,150),Vector(50,0,0),Vector(WIDTH/3*2,DEPTH/2,100),LAMBERT,Color(0.25,0.75,0.75))
 };
 
 void object_init(){
 	int n1=sizeof(sphere)/sizeof(Sphere);
 	int n2=sizeof(plane)/sizeof(Plane);
+	int n3=sizeof(triangle)/sizeof(Triangle);
 	rep(i,n1){
 		object.push_back(&sphere[i]);
 	}
 	rep(i,n2){
 		object.push_back(&plane[i]);
+	}
+	rep(i,n3){
+		object.push_back(&triangle[i]);
 	}
 }

@@ -42,6 +42,9 @@ struct Vector{
 	Vector det(const Vector&u)const{
 		return Vector(y*u.z-z*u.y,z*u.x-x*u.z,x*u.y-y*u.x);
 	}
+	double det2d(const Vector&u)const{
+		return x*u.y-y*u.x;
+	}
 };
 
 typedef Vector Color;
@@ -114,5 +117,25 @@ struct Plane:public Object{
 	}
 	Vector get_normal(Vector point){
 		return normal;
+	}
+};
+
+struct Triangle:public Plane{
+	Triangle(Vector v1,Vector v2,Vector v3,Type t,Color c=Color(),Color l=Color(),Vector o_=Vector()):
+		Plane(v1,v2,v3,t,c,l,o_){}
+
+	double intersect(Ray l){
+		double t=Plane::intersect(l);
+		if(t<EPS)return -1;
+		Vector point=l.p+l.d*t;
+		int cnt=0;
+		double f;
+		f=(v2-v1).det2d(point-v2);
+		if(f>0)cnt++;else cnt--;
+		f=(v3-v2).det2d(point-v3);
+		if(f>0)cnt++;else cnt--;
+		f=(v1-v3).det2d(point-v1);
+		if(f>0)cnt++;else cnt--;
+		return cnt==-3||cnt==3?t:-1;
 	}
 };
