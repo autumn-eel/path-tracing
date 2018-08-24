@@ -79,10 +79,10 @@ struct Object{
 struct Sphere:public Object{
 	Vector p;
 	double r;
-	Sphere(Vector p,double r,Type t,Color c=Color(),Color l=Color(),Vector o_=Vector()):
+	Sphere(Vector p,double r,Type t,Color c=Color(),Color l=Color(),Vector o_=Vector(0,0,0)):
 		Object(t,c,l),p(p),r(r){
 		o=o_;
-		if(o==Vector())o=p-Vector(0,0,r);
+		o=p+o_*Vector(r,r,r);
 	}
 
 	double intersect(Ray l){
@@ -111,7 +111,13 @@ struct Plane:public Object{
 		normal=(v2-v1).det(v3-v1).normalize();
 		d=v1.dot(normal);
 	}
-
+	Plane(Vector v1,Vector normal_,Type t,Color c=Color(),Color l=Color(),Vector o_=Vector()):
+		Object(t,c,l),v1(v1){
+		o=o_;
+		if(o==Vector())o=v1;
+		normal=normal_.normalize();
+		d=v1.dot(normal);
+	}
 	double intersect(Ray l){
 		return (d-l.p.dot(normal))/l.d.dot(normal);
 	}

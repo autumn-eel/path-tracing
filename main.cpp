@@ -5,14 +5,16 @@ using namespace std;
 int n;
 #include "raytrace.h"
 #include "pathtrace.h"
+#include "load.h"
 #include "ppm.h"
 
 Color image[SCREEN_HEIGHT][SCREEN_WIDTH];
 
 int main(){
+	//~ load_model();
 	object_init();
 	n=object.size();
-	Vector camera(WIDTH/2,-1000,HEIGHT/2);
+	Vector camera(WIDTH/2,HEIGHT/2,-1000);
 	int dx=(SCREEN_WIDTH-WIDTH)/2,dy=(SCREEN_HEIGHT-HEIGHT)/2;
 	#pragma omp parallel for schedule(dynamic, 1) num_threads(4)
 	rep(i,SCREEN_HEIGHT){
@@ -21,7 +23,7 @@ int main(){
 			rep(sx,SUPER_SAMPLES)rep(sy,SUPER_SAMPLES){
 				rep(k,SAMPLES){
 					double t=1./(SUPER_SAMPLES);
-					Vector s(j-dx+sx*t+rand_01()*t,0,i-dy+sy*t+rand_01()*t);
+					Vector s(j-dx+sx*t+rand_01()*t,i-dy+sy*t+rand_01()*t,0);
 					image[SCREEN_HEIGHT-i-1][j]=image[SCREEN_HEIGHT-i-1][j]+raytrace(Ray(s,s-camera),0)/SAMPLES/(SUPER_SAMPLES*SUPER_SAMPLES);
 				}
 			}
