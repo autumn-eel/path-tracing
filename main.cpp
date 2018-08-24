@@ -11,7 +11,7 @@ int n;
 Color image[SCREEN_HEIGHT][SCREEN_WIDTH];
 
 int main(){
-	//~ load_model();
+	load_model();
 	object_init();
 	n=object.size();
 	Vector camera(WIDTH/2,HEIGHT/2,-1000);
@@ -28,6 +28,7 @@ int main(){
 				}
 			}
 		}
+		
 	}
 	save_ppm_file(image);
 }
