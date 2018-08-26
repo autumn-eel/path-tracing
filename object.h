@@ -42,8 +42,14 @@ struct Vector{
 	Vector det(const Vector&u)const{
 		return Vector(y*u.z-z*u.y,z*u.x-x*u.z,x*u.y-y*u.x);
 	}
-	double det2d(const Vector&u)const{
+	double detxy(const Vector&u)const{
 		return x*u.y-y*u.x;
+	}
+	double detxz(const Vector&u)const{
+		return x*u.z-z*u.x;
+	}
+	double detyz(const Vector&u)const{
+		return y*u.z-z*u.y;
 	}
 };
 
@@ -79,10 +85,10 @@ struct Object{
 struct Sphere:public Object{
 	Vector p;
 	double r;
-	Sphere(Vector p,double r,Type t,Color c=Color(),Color l=Color(),Vector o_=Vector(0,0,0)):
+	Sphere(Vector p,double r,Type t,Color c=Color(),Color l=Color(),Vector o_=Vector()):
 		Object(t,c,l),p(p),r(r){
-		o=o_;
-		o=p+o_*Vector(r,r,r);
+		if(o_==Vector())o=p;
+		else o=p+Vector(r,r,r)*o_*(1./sqrt(abs(o_.x)+abs(o_.y)+abs(o_.z)));
 	}
 
 	double intersect(Ray l){
@@ -136,12 +142,30 @@ struct Triangle:public Plane{
 		Vector point=l.p+l.d*t;
 		int cnt=0;
 		double f;
-		f=(v2-v1).det2d(point-v2);
-		if(f>0)cnt++;else cnt--;
-		f=(v3-v2).det2d(point-v3);
-		if(f>0)cnt++;else cnt--;
-		f=(v1-v3).det2d(point-v1);
-		if(f>0)cnt++;else cnt--;
+		if((v2-v1).detxy(v3-v1)){
+			f=(v2-v1).detxy(point-v2);
+			if(f>0)cnt++;else cnt--;
+			f=(v3-v2).detxy(point-v3);
+			if(f>0)cnt++;else cnt--;
+			f=(v1-v3).detxy(point-v1);
+			if(f>0)cnt++;else cnt--;
+		}
+		else if((v2-v1).detxz(v3-v1)){
+			f=(v2-v1).detxz(point-v2);
+			if(f>0)cnt++;else cnt--;
+			f=(v3-v2).detxz(point-v3);
+			if(f>0)cnt++;else cnt--;
+			f=(v1-v3).detxz(point-v1);
+			if(f>0)cnt++;else cnt--;
+		}
+		else{
+			f=(v2-v1).detyz(point-v2);
+			if(f>0)cnt++;else cnt--;
+			f=(v3-v2).detyz(point-v3);
+			if(f>0)cnt++;else cnt--;
+			f=(v1-v3).detyz(point-v1);
+			if(f>0)cnt++;else cnt--;
+		}
 		return cnt==-3||cnt==3?t:-1;
 	}
 };

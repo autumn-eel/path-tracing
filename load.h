@@ -15,7 +15,7 @@ void load_model(){
 		}
 		if(s[0]=='f'){
 			string a;int x,y,z;ss>>a>>x>>y>>z;x--;y--;z--;
-			triangle.push_back(Triangle(v[x],v[y],v[z],LAMBERT,Color(0.75,0.25,0.25)));
+			triangle.push_back(Triangle(v[x],v[y],v[z],SPECULAR,Color(0.75,0.25,0.25)));
 		}
 	}
 }
