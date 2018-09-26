@@ -85,11 +85,8 @@ struct Object{
 struct Sphere:public Object{
 	Vector p;
 	double r;
-	Sphere(Vector p,double r,Type t,Color c=Color(),Color l=Color(),Vector o_=Vector()):
-		Object(t,c,l),p(p),r(r){
-		if(o_==Vector())o=p;
-		else o=p+Vector(r,r,r)*o_*(1./sqrt(abs(o_.x)+abs(o_.y)+abs(o_.z)));
-	}
+	Sphere(Vector p,double r,Type t,Color c=Color(),Color l=Color()):
+		Object(t,c,l),p(p),r(r){}
 
 	double intersect(Ray l){
 		double B=l.d.dot(l.p-p);
@@ -110,17 +107,13 @@ struct Plane:public Object{
 	Vector v1,v2,v3;
 	Vector normal;
 	double d;		//平面と原点の距離
-	Plane(Vector v1,Vector v2,Vector v3,Type t,Color c=Color(),Color l=Color(),Vector o_=Vector()):
+	Plane(Vector v1,Vector v2,Vector v3,Type t,Color c=Color(),Color l=Color()):
 		Object(t,c,l),v1(v1),v2(v2),v3(v3){
-		o=o_;
-		if(o==Vector())o=Vector((v1.x+v2.x+v3.x)/3,(v1.y+v2.y+v3.y)/3,(v1.z+v2.z+v3.z)/3);
 		normal=(v2-v1).det(v3-v1).normalize();
 		d=v1.dot(normal);
 	}
-	Plane(Vector v1,Vector normal_,Type t,Color c=Color(),Color l=Color(),Vector o_=Vector()):
+	Plane(Vector v1,Vector normal_,Type t,Color c=Color(),Color l=Color()):
 		Object(t,c,l),v1(v1){
-		o=o_;
-		if(o==Vector())o=v1;
 		normal=normal_.normalize();
 		d=v1.dot(normal);
 	}
@@ -133,8 +126,8 @@ struct Plane:public Object{
 };
 
 struct Triangle:public Plane{
-	Triangle(Vector v1,Vector v2,Vector v3,Type t,Color c=Color(),Color l=Color(),Vector o_=Vector()):
-		Plane(v1,v2,v3,t,c,l,o_){}
+	Triangle(Vector v1,Vector v2,Vector v3,Type t,Color c=Color(),Color l=Color()):
+		Plane(v1,v2,v3,t,c,l){}
 
 	double intersect(Ray l){
 		double t=Plane::intersect(l);

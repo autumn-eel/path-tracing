@@ -2,8 +2,8 @@
 #include "define.h"
 #include "object.h"
 
-void load_model(){
-	ifstream file("object.obj");
+void load_model(string path,Color c){
+	ifstream file(path.c_str());
 	string s;
 	vector<Vector>v;
 	while(getline(file,s)){
@@ -15,7 +15,7 @@ void load_model(){
 		}
 		if(s[0]=='f'){
 			string a;int x,y,z;ss>>a>>x>>y>>z;x--;y--;z--;
-			triangle.push_back(Triangle(v[x],v[y],v[z],SPECULAR,Color(0.75,0.25,0.25)));
+			triangle.push_back(Triangle(v[x],v[y],v[z],SPECULAR,c));
 		}
 	}
 }

@@ -33,7 +33,7 @@ Color pathtrace(Ray l,int depth){
 		Ray s(point,w_);
 		res=object[id]->c*pathtrace(s,depth+1);
 	}
-	else{
+	if(object[id]->t==LAMBERT){
 		Vector w,u,v;
 		w=normal;
 		if(abs(w.x)>EPS){
@@ -46,7 +46,7 @@ Color pathtrace(Ray l,int depth){
 		double r1=2*M_PI*rand_01();
 		double r2=rand_01(),r2s=sqrt(r2);
 		Vector dir=(u*cos(r1)*r2s+v*sin(r1)*r2s+w*sqrt(1-r2)).normalize();
-		res=res+object[id]->c*pathtrace(Ray(point,dir),depth+1);
+		res=object[id]->c*pathtrace(Ray(point,dir),depth+1);
 	}
 	return res/q;
 }

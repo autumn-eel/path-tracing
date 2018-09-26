@@ -15,3 +15,5 @@
 
 #define DEPTH_MIN 5
 #define DEPTH_MAX 50
+
+#define n ((int)object.size())
