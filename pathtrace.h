@@ -17,7 +17,7 @@ Color pathtrace(Ray l,int depth){
 	Color res;
 	Vector point=l.p+l.d*Min;
 	Vector normal=object[id]->get_normal(point);
-	double q=max({object[id]->c.x,object[id]->c.y,object[id]->c.z});
+	double q=min(1.,max({object[id]->c.x,object[id]->c.y,object[id]->c.z}));
 	if(depth>DEPTH_MAX){
 		q*=pow(0.5,depth-DEPTH_MAX);
 	}
@@ -42,7 +42,7 @@ Color pathtrace(Ray l,int depth){
 		else{
 			u=Vector(1,0,0).det(w).normalize();
 		}
-		v=w.det(u);
+		v=w.det(u).normalize();
 		double r1=2*M_PI*rand_01();
 		double r2=rand_01(),r2s=sqrt(r2);
 		Vector dir=(u*cos(r1)*r2s+v*sin(r1)*r2s+w*sqrt(1-r2)).normalize();

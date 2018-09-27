@@ -72,7 +72,6 @@ struct Object{
 	Type t;		//面の状態
 	Color c;	//反射率
 	Color l;	//放射
-	Vector o;	//光源位置
 	
 	Object(){}
 	Object(Type t,Color c=Color(),Color l=Color())
@@ -134,30 +133,20 @@ struct Triangle:public Plane{
 		if(t<EPS)return -1;
 		Vector point=l.p+l.d*t;
 		int cnt=0;
-		double f;
 		if((v2-v1).detxy(v3-v1)){
-			f=(v2-v1).detxy(point-v2);
-			if(f>0)cnt++;else cnt--;
-			f=(v3-v2).detxy(point-v3);
-			if(f>0)cnt++;else cnt--;
-			f=(v1-v3).detxy(point-v1);
-			if(f>0)cnt++;else cnt--;
+			cnt=((v2-v1).detxy(point-v2)>0?1:-1)+
+				((v3-v2).detxy(point-v3)>0?1:-1)+
+				((v1-v3).detxy(point-v1)>0?1:-1);
 		}
 		else if((v2-v1).detxz(v3-v1)){
-			f=(v2-v1).detxz(point-v2);
-			if(f>0)cnt++;else cnt--;
-			f=(v3-v2).detxz(point-v3);
-			if(f>0)cnt++;else cnt--;
-			f=(v1-v3).detxz(point-v1);
-			if(f>0)cnt++;else cnt--;
+			cnt=((v2-v1).detxz(point-v2)>0?1:-1)+
+				((v3-v2).detxz(point-v3)>0?1:-1)+
+				((v1-v3).detxz(point-v1)>0?1:-1);
 		}
 		else{
-			f=(v2-v1).detyz(point-v2);
-			if(f>0)cnt++;else cnt--;
-			f=(v3-v2).detyz(point-v3);
-			if(f>0)cnt++;else cnt--;
-			f=(v1-v3).detyz(point-v1);
-			if(f>0)cnt++;else cnt--;
+			cnt=((v2-v1).detyz(point-v2)>0?1:-1)+
+				((v3-v2).detyz(point-v3)>0?1:-1)+
+				((v1-v3).detyz(point-v1)>0?1:-1);
 		}
 		return cnt==-3||cnt==3?t:-1;
 	}

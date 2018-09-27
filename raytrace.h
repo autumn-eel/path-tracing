@@ -36,7 +36,7 @@ Color raytrace(Ray l,int depth){
 	else{
 		rep(i,n){
 			if(object[i]->l==Color())continue;
-			Ray s(point,object[i]->o-point);
+			Ray s(point,((Sphere*)object[i])->p-point);
 			double tim=object[i]->intersect(s);
 			if(tim<EPS)continue;
 			bool flag=true;
