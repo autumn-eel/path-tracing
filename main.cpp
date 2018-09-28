@@ -2,7 +2,6 @@
 #define rep(i,n)for(int i=0;i<(n);i++)
 using namespace std;
 
-int cnt=0;
 #include "pathtrace.h"
 #include "load.h"
 #include "ppm.h"
@@ -11,7 +10,7 @@ Color image[SCREEN_HEIGHT][SCREEN_WIDTH];
 
 int main(){
 	auto start=chrono::system_clock::now();
-	load_model("object.obj",Color(0.75,0.25,0.25));
+	//~ load_model("object.obj",Color(0.75,0.25,0.25));
 	object_init();
 	Vector camera(WIDTH/2,HEIGHT/3*2,-1000);
 	int dx=(SCREEN_WIDTH-WIDTH)/2,dy=(SCREEN_HEIGHT-HEIGHT)/2;

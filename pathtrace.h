@@ -48,5 +48,8 @@ Color pathtrace(Ray l,int depth){
 		Vector dir=(u*cos(r1)*r2s+v*sin(r1)*r2s+w*sqrt(1-r2)).normalize();
 		res=object[id]->c*pathtrace(Ray(point,dir),depth+1);
 	}
+	if(object[id]->t==REFRACTION){
+		
+	}
 	return res/q;
 }

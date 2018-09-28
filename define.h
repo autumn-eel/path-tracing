@@ -8,7 +8,7 @@
 
 #define WIDTH 640
 #define HEIGHT 480
-#define DEPTH 400
+#define DEPTH 640
 
 #define SAMPLES 4
 #define SUPER_SAMPLES 2

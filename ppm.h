@@ -1,7 +1,7 @@
 #pragma once
 
 int to_int(double x){
-	return pow(x,1/2.2)*255+0.5;
+	return min(1.,max(0.,pow(x,1/2.2)))*255+0.5;
 }
 
 void save_ppm_file(Color image[][SCREEN_WIDTH]){

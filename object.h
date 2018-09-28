@@ -65,13 +65,14 @@ struct Ray{
 
 enum Type{
 	LAMBERT,
-	SPECULAR
+	SPECULAR,
+	REFRACTION
 };
 
 struct Object{
-	Type t;		//面の状態
-	Color c;	//反射率
-	Color l;	//放射
+	Type t;
+	Color c;
+	Color l;
 	
 	Object(){}
 	Object(Type t,Color c=Color(),Color l=Color())
@@ -105,7 +106,7 @@ struct Sphere:public Object{
 struct Plane:public Object{
 	Vector v1,v2,v3;
 	Vector normal;
-	double d;		//平面と原点の距離
+	double d;
 	Plane(Vector v1,Vector v2,Vector v3,Type t,Color c=Color(),Color l=Color()):
 		Object(t,c,l),v1(v1),v2(v2),v3(v3){
 		normal=(v2-v1).det(v3-v1).normalize();
